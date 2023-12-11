@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/InvoiceManager/.vs
+/.vs/InvoiceManager/FileContentIndex
+/src/InvoiceManager/obj
+/src/InvoiceManager/InvoiceManager.csproj.user
