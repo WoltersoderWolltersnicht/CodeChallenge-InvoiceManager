@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InvoiceManager.Infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using InvoiceManager.Domain.People;
 using InvoiceManager.Infrastructure.EF.MySql.Repositories;
@@ -28,13 +27,13 @@ public static class MySqlExtensions
 
     public static IServiceCollection UseMySqlRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<IPersonRepository, MySqlPersonRepository>();
+        services.AddScoped<IPersonRepository, MySqlPersonRepository>();
 
-        services.AddSingleton<IBusinessRepository, MySqlBusinessRepository>();
+        services.AddScoped<IBusinessRepository, MySqlBusinessRepository>();
 
-        services.AddSingleton<IInvoiceLineRepository, MySqlInvoiceLineRepository>();
+        services.AddScoped<IInvoiceLineRepository, MySqlInvoiceLineRepository>();
 
-        services.AddSingleton<IInvoiceRepository, MySqlInvoiceRepository>();
+        services.AddScoped<IInvoiceRepository, MySqlInvoiceRepository>();
 
         return services;
     }

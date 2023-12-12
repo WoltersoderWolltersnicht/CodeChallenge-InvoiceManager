@@ -4,7 +4,7 @@ using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
 using Microsoft.EntityFrameworkCore;
 
-namespace InvoiceManager.Infrastructure.DataBase;
+namespace InvoiceManager.Infrastructure.EF;
 
 public class InvoiceManagerDbContext : DbContext
 {

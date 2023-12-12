@@ -6,13 +6,13 @@ namespace InvoiceManager.Domain.Invoices;
 
 public class Invoice
 {
-    public int Id { get; set; }
+    public uint Id { get; set; }
     public string GUID { get; set; }
     public string Number { get; set; }
     public double Amount { get; set; }
     public uint VAT { get; set; }
     public Business Business { get; set; }
     public Person Person { get; set; }
-    public string Estado { get; set; }
+    public InvoiceStatusEnum Estado { get; set; }
     public List<InvoiceLine> InvoiceLines { get; set; }
 }

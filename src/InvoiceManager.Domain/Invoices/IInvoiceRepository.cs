@@ -4,8 +4,8 @@ namespace InvoiceManager.Domain.Invoices;
 
 public interface IInvoiceRepository
 {
-    public Result<Invoice> GetInvoiceById(uint id);
-    public Result<Invoice> CreateInvoice(Invoice newInvoice);
-    public Result<Invoice> UpdateInvoice(uint id, Invoice newInvoice);
-    public Result<Invoice> DeleteInvoice(uint id);
+    public Task<Result<Invoice>> GetInvoiceById(uint id);
+    public Task<Result<Invoice>> CreateInvoice(Invoice newInvoice);
+    public Task<Result<Invoice>> UpdateInvoice(Invoice newInvoice);
+    public Task<Result<Invoice>> DeleteInvoice(uint id);
 }

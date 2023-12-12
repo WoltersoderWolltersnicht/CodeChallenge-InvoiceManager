@@ -4,8 +4,8 @@ namespace InvoiceManager.Domain.InvoiceLines;
 
 public interface IInvoiceLineRepository
 {
-    public Result<InvoiceLine> GetInvoiceLineById(uint id);
-    public Result<InvoiceLine> CreateInvoiceLine(InvoiceLine newInvoiceLine);
-    public Result<InvoiceLine> UpdateInvoiceLine(uint id, InvoiceLine newInvoiceLine);
-    public Result<InvoiceLine> DeleteInvoiceLine(uint id);
+    public Task<Result<InvoiceLine>> GetInvoiceLineById(uint id);
+    public Task<Result<InvoiceLine>> CreateInvoiceLine(InvoiceLine newInvoiceLine);
+    public Task<Result<InvoiceLine>> UpdateInvoiceLine(InvoiceLine newInvoiceLine);
+    public Task<Result<InvoiceLine>> DeleteInvoiceLine(uint id);
 }

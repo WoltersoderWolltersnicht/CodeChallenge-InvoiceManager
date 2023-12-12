@@ -1,4 +1,4 @@
-using InvoiceManager.Infrastructure.DataBase;
+using InvoiceManager.Infrastructure.EF;
 using InvoiceManager.Infrastructure.EF.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
