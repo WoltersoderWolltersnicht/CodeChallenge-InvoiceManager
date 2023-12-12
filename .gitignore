@@ -1,8 +1,21 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/src/InvoiceManager/.vs
-/.vs/InvoiceManager/FileContentIndex
+﻿/src/InvoiceManager/.vs
 /src/InvoiceManager/obj
 /src/InvoiceManager/InvoiceManager.csproj.user
+/.vs/*
+/src/InvoiceManager.App/.vs
+/src/InvoiceManager.App/bin/Debug
+/src/InvoiceManager.App/obj/Debug
+/src/InvoiceManager.App/obj/Release/net8.0
+/src/InvoiceManager.App/obj
+/src/InvoiceManager.Application/bin/Debug
+/src/InvoiceManager.Application/obj/Debug
+/src/InvoiceManager.Application/obj/Release/net8.0
+/src/InvoiceManager.Application/obj
+/src/InvoiceManager.Domain/bin/Debug
+/src/InvoiceManager.Domain/obj/Debug
+/src/InvoiceManager.Domain/obj/Release/net8.0
+/src/InvoiceManager.Domain/obj
+/src/InvoiceManager.Infrastructure/bin/Debug
+/src/InvoiceManager.Infrastructure/obj/Debug
+/src/InvoiceManager.Infrastructure/obj/Release/net8.0
+/src/InvoiceManager.Infrastructure/obj
