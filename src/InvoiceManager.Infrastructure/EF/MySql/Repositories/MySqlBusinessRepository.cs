@@ -1,5 +1,6 @@
 ﻿using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
@@ -17,7 +18,7 @@ public class MySqlBusinessRepository : IBusinessRepository
     {
         _context.Business.Add(newBusiness);
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return "Error storing business into database";
+        if (result != 1) return new DatabaseException("Error storing business into database");
         return newBusiness;
     }
 
@@ -28,7 +29,7 @@ public class MySqlBusinessRepository : IBusinessRepository
 
         var entityDeleted = _context.Remove(entityToDelete);
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return $"Error deleting business Id:{id}";
+        if (result != 1) return new DatabaseException($"Error deleting business Id:{id}");
         return entityDeleted.Entity;
     }
 
@@ -39,7 +40,7 @@ public class MySqlBusinessRepository : IBusinessRepository
             .Include(b => b.Invoices).ThenInclude(i => i.Person)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (business is null) return $"Business with Id:{id} not found";
+        if (business is null) return new IdNotFoundException(id);
         return business;
     }
 
@@ -51,7 +52,7 @@ public class MySqlBusinessRepository : IBusinessRepository
         if(newBusiness.Name != null) businessToUpdate.Value.Name = newBusiness.Name;
         if (newBusiness.CIF != null) businessToUpdate.Value.CIF = newBusiness.CIF;
         var result = await _context.SaveChangesAsync();
-        if(result != 1) return $"Business with Id:{newBusiness.Id} could not be updated";
+        if(result != 1) return new DatabaseException("Business with Id:{newBusiness.Id} could not be updated");
         return businessToUpdate;
     }
 }

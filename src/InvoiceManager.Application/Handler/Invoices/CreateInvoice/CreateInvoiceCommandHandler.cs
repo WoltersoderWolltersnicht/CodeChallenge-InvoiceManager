@@ -1,5 +1,6 @@
 ﻿using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.InvoiceLines;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
@@ -62,7 +63,7 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
             NIF = person.NIF
         });
 
-        if (!createPersonResult.IsSuccess) return "Person could not be saved correctly";
+        if (!createPersonResult.IsSuccess) return new DatabaseException("Person could not be saved correctly");
         return createPersonResult;
     }
 }

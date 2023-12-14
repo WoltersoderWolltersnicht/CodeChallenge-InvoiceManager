@@ -1,4 +1,5 @@
 ﻿using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.InvoiceLines;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ public class MySqlInvoiceLineRepository : IInvoiceLineRepository
 
         _context.InvoiceLines.Add(newInvoiceLine);
         var result = await _context.SaveChangesAsync();
-        if (result != 2) return "Error storing invoice line into database";
+        if (result != 2) return new DatabaseException("Error storing invoice line into database");
         return newInvoiceLine;
     }
 
@@ -33,14 +34,14 @@ public class MySqlInvoiceLineRepository : IInvoiceLineRepository
         _context.Remove(invoiceLine.Value);
 
         var result = await _context.SaveChangesAsync();
-        if (result != 2) return $"Error deleting business Id:{id}";
+        if (result != 2) return new DatabaseException($"Error deleting business Id:{id}");
         return invoiceLine.Value;
     }
 
     public async Task<Result<InvoiceLine>> GetInvoiceLineById(uint id)
     {
         var invoiceLine = await _context.InvoiceLines.Include(il => il.Invoice).SingleAsync(b => b.Id == id);
-        if (invoiceLine is null) return $"Invoice line with Id:{id} not found";
+        if (invoiceLine is null) return new IdNotFoundException(id);
         return invoiceLine;
     }
 
@@ -59,7 +60,7 @@ public class MySqlInvoiceLineRepository : IInvoiceLineRepository
         if (newInvoiceLine.VAT != null) businessToUpdate.Value.VAT = newInvoiceLine.VAT;
 
         var result = await _context.SaveChangesAsync();
-        if (result < 1) return $"Invoice line with Id:{newInvoiceLine.Id} could not be updated";
+        if (result < 1) return new DatabaseException($"Invoice line with Id:{newInvoiceLine.Id} could not be updated");
         return businessToUpdate;
     }
 }

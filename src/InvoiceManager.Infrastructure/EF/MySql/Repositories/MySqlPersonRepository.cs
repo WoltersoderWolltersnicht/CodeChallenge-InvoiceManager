@@ -1,4 +1,5 @@
 ﻿using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.People;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ public class MySqlPersonRepository : IPersonRepository
     {
         _context.People.Add(newPerson);
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return "Error storing business person database";
+        if (result != 1) return new DatabaseException("Error storing person");
         return newPerson;
     }
 
@@ -28,7 +29,7 @@ public class MySqlPersonRepository : IPersonRepository
 
         _context.Remove(person);
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return $"Error deleting person Id:{id}";
+        if (result != 1) return new DatabaseException($"Error deleting person Id:{id}");
         return person.Value;
     }
 
@@ -39,7 +40,7 @@ public class MySqlPersonRepository : IPersonRepository
             .Include(p => p.Invoices).ThenInclude(i => i.Business)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (person is null) return $"Person with Id:{id} not found";
+        if (person is null) return new IdNotFoundException(id);
         return person;
     }
 
@@ -54,7 +55,7 @@ public class MySqlPersonRepository : IPersonRepository
         if (newPerson.NIF != null) personToUpdate.Value.NIF = newPerson.NIF;
 
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return $"Person with Id:{newPerson.Id} could not be updated";
+        if (result != 1) return new DatabaseException($"Person with Id:{newPerson.Id} could not be updated");
         
         return personToUpdate.Value;
     }

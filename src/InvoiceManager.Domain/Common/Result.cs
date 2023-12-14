@@ -3,7 +3,7 @@
 public class Result<T>
 {
     public T Value { get; set; }
-    public string Error { get; set; }
+    public Exception Error { get; set; }
     public bool IsSuccess { get; set; }
 
     public static implicit operator Result<T>(T value) => new Result<T>
@@ -12,7 +12,7 @@ public class Result<T>
         IsSuccess = true
     };
 
-    public static implicit operator Result<T>(string error) => new Result<T>()
+    public static implicit operator Result<T>(Exception error) => new Result<T>()
     {
         Error = error,
         IsSuccess = false

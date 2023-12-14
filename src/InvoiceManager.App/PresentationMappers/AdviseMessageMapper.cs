@@ -1,22 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InvoiceManager.App.PresentationDto;
+using InvoiceManager.Domain.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace InvoiceManager.App.PresentationMappers
 {
     public static class AdviseMessageMapper
     {
-        public static IActionResult Map(string error)
+        public static IActionResult Map(Exception error)
         {
-            return new ObjectResult(error)
+            var statusCode = MapHttpStatus(error);
+            string message = statusCode is null ? "Not Mapped Exception Occurred" : error.Message;
+           
+            return new ObjectResult(new AdviseMessgeRs(message))
             {
-                StatusCode = MapHttpStatus(),
+                StatusCode = statusCode
             };
 
-        } 
+        }
 
-        public static int MapHttpStatus()
+        public static int? MapHttpStatus(Exception error)
         {
-            return (int)HttpStatusCode.InternalServerError;
+            if (error.GetType() == typeof(IdNotFoundException)) return (int)HttpStatusCode.NotFound;
+            if (error.GetType() == typeof(DatabaseException)) return (int)HttpStatusCode.InternalServerError;
+            if (error.GetType() == typeof(BadRequestException)) return (int)HttpStatusCode.BadRequest;
+            if (error.GetType() == typeof(DupplicateKeyException)) return (int)HttpStatusCode.BadRequest;
+            return null;
         }
     }
 }
