@@ -28,8 +28,8 @@ public class InvoiceManagerDbContext : DbContext
         modelBuilder.Entity<Business>(business =>
         {
             business.ToTable("Empresa");
-            business.HasAlternateKey(i => i.Name);
-            business.HasAlternateKey(i => i.CIF);
+            business.HasIndex(b => b.CIF).IsUnique();
+            business.HasIndex(b => b.Name).IsUnique();
             business.Property(il => il.Id).HasColumnName("IdEmpresa");
             business.Property(il => il.Name).HasColumnName("RazonSocial");
             business.Property(il => il.CIF).HasColumnName("CIF");
@@ -38,7 +38,7 @@ public class InvoiceManagerDbContext : DbContext
         modelBuilder.Entity<Person>(person =>
         {
             person.ToTable("Persona");
-            person.HasAlternateKey(i => i.NIF);
+            person.HasIndex(i => i.NIF).IsUnique();
             person.Property(il => il.Id).HasColumnName("IdPersona");
             person.Property(il => il.Name).HasColumnName("Nombre");
             person.Property(il => il.Surname1).HasColumnName("Apellido1");
@@ -46,20 +46,19 @@ public class InvoiceManagerDbContext : DbContext
             person.Property(il => il.NIF).HasColumnName("NIF");
         });
 
-        modelBuilder.Entity<Invoice>(
-        invoice =>
+        modelBuilder.Entity<Invoice>(invoice =>
         {
             invoice.ToTable("Factura");
-            invoice.HasAlternateKey(i => i.GUID);
+            invoice.HasIndex(i => i.GUID).IsUnique();
             invoice.Property(i => i.Id).HasColumnName("IdFactura");
             invoice.Property(i => i.GUID).HasColumnName("GUIDFactura");
             invoice.Property(i => i.Number).HasColumnName("NumFactura");
             invoice.Property(i => i.Amount).HasColumnName("Importe");
             invoice.Property(i => i.VAT).HasColumnName("IVA");
 
-            invoice.HasOne(i => i.Business).WithMany(b => b.Invoices).HasForeignKey("IdEmpresa").IsRequired();
-            invoice.HasOne(i => i.Person).WithMany(p => p.Invoices).HasForeignKey("IdPersona");
-            invoice.HasMany(i => i.InvoiceLines).WithOne(il => il.Invoice).HasForeignKey("IdFactura").IsRequired();
+            invoice.HasOne(i => i.Business).WithMany(b => b.Invoices).HasForeignKey("IdEmpresa").IsRequired().OnDelete(DeleteBehavior.NoAction);
+            invoice.HasOne(i => i.Person).WithMany(p => p.Invoices).HasForeignKey("IdPersona").OnDelete(DeleteBehavior.NoAction);
+            invoice.HasMany(i => i.InvoiceLines).WithOne(il => il.Invoice).HasForeignKey("IdFactura").IsRequired().OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

@@ -23,25 +23,26 @@ public class MySqlInvoiceRepository : IInvoiceRepository
 
     public async Task<Result<Invoice>> DeleteInvoice(uint id)
     {
-        var invoice = _context.Invoices.Attach(new Invoice { Id = id });
-        invoice.State = EntityState.Deleted;
+        var invoice = await GetInvoiceById(id);
+        if (!invoice.IsSuccess) return invoice.Error;
+        _context.Remove(invoice);
         var result = await _context.SaveChangesAsync();
         if (result != 1) return $"Error deleting invoice Id:{id}";
-        return invoice.Entity;
+        return invoice.Value;
     }
 
     public async Task<Result<Invoice>> GetInvoiceById(uint id)
     {
-        var business = await _context.Invoices.SingleAsync(b => b.Id == id);
+        var business = await _context.Invoices.Include(i => i.Person).Include(i => i.Business).Include(i => i.InvoiceLines).FirstOrDefaultAsync(b => b.Id == id);
         if (business is null) return $"Invoice with Id:{id} not found";
         return business;
     }
 
     public async Task<Result<Invoice>> UpdateInvoice(Invoice newInvoice)
     {
-        var invoiceToUpdate = await _context.Invoices.SingleAsync(b => b.Id == newInvoice.Id);
-        if (invoiceToUpdate is null) return $"Invoice with Id:{newInvoice.Id} not found";
-        if (newInvoice.Estado != null) invoiceToUpdate.Estado = newInvoice.Estado;
+        var invoiceToUpdate = await GetInvoiceById(newInvoice.Id);
+        if (!invoiceToUpdate.IsSuccess) return invoiceToUpdate.Error;
+        if (newInvoice.Estado != null) invoiceToUpdate.Value.Estado = newInvoice.Estado;
         var result = await _context.SaveChangesAsync();
         if (result != 1) return $"Invoice with Id:{newInvoice.Id} could not be updated";
         return newInvoice;
