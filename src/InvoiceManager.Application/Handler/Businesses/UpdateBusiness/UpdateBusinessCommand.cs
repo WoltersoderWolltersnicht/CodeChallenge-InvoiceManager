@@ -1,6 +1,6 @@
-﻿using InvoiceManager.Domain.Businesses;
+﻿using InvoiceManager.Domain.Common;
 using MediatR;
 
 namespace InvoiceManager.Application.Handler.Businesses.UpdateBusiness;
 
-public record UpdateBusinessCommand(Business Id) : IRequest<UpdateBusinessCommandResponse>;
+public record UpdateBusinessCommand(uint Id, string Name, string CIF) : IRequest<Result<UpdateBusinessCommandResponse>>;

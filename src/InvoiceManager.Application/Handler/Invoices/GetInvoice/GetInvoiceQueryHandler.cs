@@ -1,11 +1,21 @@
-﻿using MediatR;
+﻿using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Invoices;
+using MediatR;
 
 namespace InvoiceManager.Application.Handler.Invoices.GetInvoice;
 
-public class GetInvoiceQueryHandler : IRequestHandler<GetInvoiceQuery, GetInvoiceQueryResponse>
+public class GetInvoiceQueryHandler : IRequestHandler<GetInvoiceQuery, Result<GetInvoiceQueryResponse>>
 {
-    public Task<GetInvoiceQueryResponse> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
+    private readonly IInvoiceRepository _invoiceRepository;
+
+    public GetInvoiceQueryHandler(IInvoiceRepository invoiceRepository)
     {
-        throw new NotImplementedException();
+        _invoiceRepository = invoiceRepository;
+    }
+    public async Task<Result<GetInvoiceQueryResponse>> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
+    {
+        var getResponse = await _invoiceRepository.GetInvoiceById(request.Id);
+        if (!getResponse.IsSuccess) return getResponse.Error;
+        return new GetInvoiceQueryResponse(getResponse.Value);
     }
 }

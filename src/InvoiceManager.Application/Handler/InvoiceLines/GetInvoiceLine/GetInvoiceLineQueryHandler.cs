@@ -1,11 +1,23 @@
-﻿using MediatR;
+﻿using InvoiceManager.Application.Handler.InvoiceLines.DeleteInvoiceLine;
+using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.InvoiceLines;
+using MediatR;
 
 namespace InvoiceManager.Application.Handler.InvoiceLines.GetInvoiceLine;
 
-public class GetInvoiceLineQueryHandler : IRequestHandler<GetInvoiceLineQuery, GetInvoiceLineQueryResponse>
+public class GetInvoiceLineQueryHandler : IRequestHandler<GetInvoiceLineQuery, Result<GetInvoiceLineQueryResponse>>
 {
-    public Task<GetInvoiceLineQueryResponse> Handle(GetInvoiceLineQuery request, CancellationToken cancellationToken)
+    private readonly IInvoiceLineRepository _invoiceLineRepository;
+
+    public GetInvoiceLineQueryHandler(IInvoiceLineRepository invoiceLineRepository)
     {
-        throw new NotImplementedException();
+        _invoiceLineRepository = invoiceLineRepository;
+    }
+
+    public async Task<Result<GetInvoiceLineQueryResponse>> Handle(GetInvoiceLineQuery request, CancellationToken cancellationToken)
+    {
+        var getResponse = await _invoiceLineRepository.GetInvoiceLineById(request.Id);
+        if (!getResponse.IsSuccess) return getResponse.Error;
+        return new GetInvoiceLineQueryResponse(getResponse.Value);
     }
 }

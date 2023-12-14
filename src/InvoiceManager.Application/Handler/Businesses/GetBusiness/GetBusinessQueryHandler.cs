@@ -1,11 +1,23 @@
-﻿using MediatR;
+﻿using InvoiceManager.Application.Handler.Businesses.DeleteBusiness;
+using InvoiceManager.Domain.Businesses;
+using InvoiceManager.Domain.Common;
+using MediatR;
 
 namespace InvoiceManager.Application.Handler.Businesses.GetBusiness;
 
-public class GetBusinessQueryHandler : IRequestHandler<GetBusinessQuery, GetBusinessQueryResponse>
+public class GetBusinessQueryHandler : IRequestHandler<GetBusinessQuery, Result<GetBusinessQueryResponse>>
 {
-    public Task<GetBusinessQueryResponse> Handle(GetBusinessQuery request, CancellationToken cancellationToken)
+    private readonly IBusinessRepository _businessRepository;
+
+    public GetBusinessQueryHandler(IBusinessRepository businessRepository)
     {
-        throw new NotImplementedException();
+        _businessRepository = businessRepository;
+    }
+
+    public async Task<Result<GetBusinessQueryResponse>> Handle(GetBusinessQuery request, CancellationToken cancellationToken)
+    {
+        var getResponse = await _businessRepository.GetBusinessById(request.Id);
+        if (!getResponse.IsSuccess) return getResponse.Error;
+        return new GetBusinessQueryResponse(getResponse.Value);
     }
 }

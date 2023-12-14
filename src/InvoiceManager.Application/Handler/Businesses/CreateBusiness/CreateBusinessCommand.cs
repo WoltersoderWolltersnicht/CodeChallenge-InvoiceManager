@@ -1,7 +1,6 @@
-﻿using InvoiceManager.Domain.Businesses;
-using InvoiceManager.Domain.Invoices;
+﻿using InvoiceManager.Domain.Common;
 using MediatR;
 
 namespace InvoiceManager.Application.Handler.Businesses.CreateBusiness;
 
-public record CreateBusinessCommand(Business Business) : IRequest<CreateBusinessCommandResponse>;
+public record CreateBusinessCommand(string Name, string CIF) : IRequest<Result<CreateBusinessCommandResponse>>;
