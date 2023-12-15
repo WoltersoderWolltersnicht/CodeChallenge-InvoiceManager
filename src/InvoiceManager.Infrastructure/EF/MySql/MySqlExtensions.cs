@@ -11,7 +11,7 @@ public static class MySqlExtensions
         MySqlConfiguration mySqlConfiguration = new();
         configuration.Bind("MySql", mySqlConfiguration);
 
-        services.AddDbContext<InvoiceManagerDbContext>(options =>
+        services.AddDbContextFactory<InvoiceManagerDbContext>(options =>
         {
             var connectionString = mySqlConfiguration.BuildConnectionString();
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));

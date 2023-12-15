@@ -4,6 +4,9 @@ using InvoiceManager.Infrastructure.EF.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -15,13 +18,9 @@ builder.Services.AddRepositories();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(BaseHandler).Assembly));
 
 var app = builder.Build();
-
 app.MapControllers();
 
-//var scope = app.Services.CreateScope();
-//var dbContext = scope.ServiceProvider.GetService<InvoiceManagerDbContext>();
-//var isCreated = dbContext.Database.EnsureCreated();
-//if (!isCreated) throw new Exception("Database not created succesfully");
+app.Services.EnsureEFConnection();
 
 app.UseSwagger();
 app.UseSwaggerUI();
