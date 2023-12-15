@@ -19,3 +19,6 @@
 /src/InvoiceManager.Infrastructure/obj/Debug
 /src/InvoiceManager.Infrastructure/obj/Release/net8.0
 /src/InvoiceManager.Infrastructure/obj
+/test/UnitTests/bin/Debug/net7.0
+/test/UnitTests/obj/Debug/net7.0
+/test/UnitTests/obj

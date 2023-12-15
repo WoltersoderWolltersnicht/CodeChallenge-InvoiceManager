@@ -1,6 +1,4 @@
-﻿using InvoiceManager.Application.Handler.People.CreatePerson;
-using InvoiceManager.Domain.Businesses;
-using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.People;
 using MediatR;
 

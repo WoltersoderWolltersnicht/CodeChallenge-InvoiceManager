@@ -11,14 +11,12 @@ namespace InvoiceManager.Application.Handler.Invoices.CreateInvoice;
 public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand, Result<CreateInvoiceCommandResponse>>
 {
     private readonly IInvoiceRepository _invoiceRepository;
-    private readonly IInvoiceLineRepository _invoiceLineRepository;
     private readonly IPersonRepository _personRepository;
     private readonly IBusinessRepository _businessRepository;
 
-    public CreateInvoiceCommandHandler(IInvoiceRepository invoiceRepository, IInvoiceLineRepository invoiceLineRepository, IPersonRepository personRepository, IBusinessRepository businessRepository)
+    public CreateInvoiceCommandHandler(IInvoiceRepository invoiceRepository, IPersonRepository personRepository, IBusinessRepository businessRepository)
     {
         _invoiceRepository = invoiceRepository;
-        _invoiceLineRepository = invoiceLineRepository;
         _personRepository = personRepository;
         _businessRepository = businessRepository;
     }

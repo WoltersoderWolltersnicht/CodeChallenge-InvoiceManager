@@ -22,9 +22,9 @@ public class UpdateInvoiceLineCommandHandler : IRequestHandler<UpdateInvoiceLine
         if (request.Amount != null)
         {
             //Update Invoice Amount Difference
-            invoiceLineToUpdate.Amount = request.Amount;
             double amountDifference = request.Amount.Value - invoiceLineToUpdate.Amount.Value;
             invoiceLineToUpdate.Invoice.Amount += amountDifference;
+            invoiceLineToUpdate.Amount = request.Amount;
         }
 
         if (request.VAT != null) invoiceLineToUpdate.VAT = request.VAT;

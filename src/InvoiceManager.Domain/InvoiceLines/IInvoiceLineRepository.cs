@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Domain.Businesses;
-using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Common;
 using System.Linq.Expressions;
 
 namespace InvoiceManager.Domain.InvoiceLines;

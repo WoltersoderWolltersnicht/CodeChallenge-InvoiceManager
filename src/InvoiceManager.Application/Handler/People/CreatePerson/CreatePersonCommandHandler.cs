@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Application.Handler.Businesses.CreateBusiness;
-using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;

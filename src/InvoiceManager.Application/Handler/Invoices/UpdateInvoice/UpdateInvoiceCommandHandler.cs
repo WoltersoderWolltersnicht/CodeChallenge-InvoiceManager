@@ -4,11 +4,11 @@ using MediatR;
 
 namespace InvoiceManager.Application.Handler.Invoices.UpdateInvoice;
 
-public class GetInvoiceQueryHandler : IRequestHandler<UpdateInvoiceCommand, Result<UpdateInvoiceCommandResponse>>
+public class UpdateInvoiceCommandHandler : IRequestHandler<UpdateInvoiceCommand, Result<UpdateInvoiceCommandResponse>>
 {
     private readonly IInvoiceRepository _invoiceRepository;
 
-    public GetInvoiceQueryHandler(IInvoiceRepository invoiceRepository)
+    public UpdateInvoiceCommandHandler(IInvoiceRepository invoiceRepository)
     {
         _invoiceRepository = invoiceRepository;
     }

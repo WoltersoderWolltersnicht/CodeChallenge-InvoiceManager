@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Application.Handler.People.DeletePerson;
-using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.People;
 using MediatR;
 

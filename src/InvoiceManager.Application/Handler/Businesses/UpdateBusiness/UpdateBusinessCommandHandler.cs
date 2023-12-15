@@ -5,11 +5,11 @@ using MediatR;
 
 namespace InvoiceManager.Application.Handler.Businesses.UpdateBusiness;
 
-public class UpdateBusinessQueryHandler : IRequestHandler<UpdateBusinessCommand, Result<UpdateBusinessCommandResponse>>
+public class UpdateBusinessCommandHandler : IRequestHandler<UpdateBusinessCommand, Result<UpdateBusinessCommandResponse>>
 {
     private readonly IBusinessRepository _businessRepository;
 
-    public UpdateBusinessQueryHandler(IBusinessRepository businessRepository)
+    public UpdateBusinessCommandHandler(IBusinessRepository businessRepository)
     {
         _businessRepository = businessRepository;
     }

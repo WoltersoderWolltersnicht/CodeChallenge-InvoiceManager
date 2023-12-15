@@ -1,6 +1,4 @@
-﻿using InvoiceManager.Application.Handler.InvoiceLines.DeleteInvoiceLine;
-using InvoiceManager.Domain.Common;
-using InvoiceManager.Domain.InvoiceLines;
+﻿using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.Invoices;
 using MediatR;
 
