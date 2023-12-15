@@ -14,7 +14,7 @@ public class GetInvoiceQueryHandler : IRequestHandler<GetInvoiceQuery, Result<Ge
     }
     public async Task<Result<GetInvoiceQueryResponse>> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
     {
-        var getResponse = await _invoiceRepository.GetInvoiceById(request.Id);
+        var getResponse = await _invoiceRepository.GetById(request.Id);
         if (!getResponse.IsSuccess) return getResponse.Error;
         return new GetInvoiceQueryResponse(getResponse.Value);
     }

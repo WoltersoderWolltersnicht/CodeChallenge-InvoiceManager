@@ -21,30 +21,34 @@ public class BusinessController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<BusinessRs>> Get(uint id)
+    public async Task<IActionResult> Get(uint id)
     {
         var queryResult = await _mediator.Send(new GetBusinessQuery(id));
-        return BusinessMapper.Map(queryResult.Value.Business);
+        if (!queryResult.IsSuccess) return AdviseMessageMapper.Map(queryResult.Error);
+        return Ok(BusinessMapper.Map(queryResult.Value.Business));
     }
 
     [HttpPost]
-    public async Task<ActionResult<BusinessRs>> Post([FromBody] CreateBusinessCommand createCommand)
+    public async Task<IActionResult> Post([FromBody] CreateBusinessCommand createCommand)
     {
         var commandResult = await _mediator.Send(createCommand);
-        return BusinessMapper.Map(commandResult.Value.Business);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(BusinessMapper.Map(commandResult.Value.Business));
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<BusinessRs>> Delete(uint id)
+    public async Task<IActionResult> Delete(uint id)
     {
         var commandResult = await _mediator.Send(new DeleteBusinessCommand(id));
-        return BusinessMapper.Map(commandResult.Value.Business);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(BusinessMapper.Map(commandResult.Value.Business));
     }
 
     [HttpPut]
-    public async Task<ActionResult<BusinessRs>> Put([FromBody] UpdateBusinessCommand createCommand)
+    public async Task<IActionResult> Put([FromBody] UpdateBusinessCommand createCommand)
     {
         var commandResult = await _mediator.Send(createCommand);
-        return BusinessMapper.Map(commandResult.Value.Business);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(BusinessMapper.Map(commandResult.Value.Business));
     }
 }

@@ -14,12 +14,22 @@ public class UpdateInvoiceLineCommandHandler : IRequestHandler<UpdateInvoiceLine
     }
     public async Task<Result<UpdateInvoiceLineCommandResponse>> Handle(UpdateInvoiceLineCommand request, CancellationToken cancellationToken)
     {
-        var updateResponse = await _invoiceLineRepository.UpdateInvoiceLine(new InvoiceLine()
+        var getInvoiceLineResult = await _invoiceLineRepository.GetById(request.Id);
+        if (!getInvoiceLineResult.IsSuccess) return getInvoiceLineResult.Error;
+
+        var invoiceLineToUpdate = getInvoiceLineResult.Value;
+
+        if (request.Amount != null)
         {
-            Id = request.Id,
-            Amount = request.Amount,
-            VAT = request.VAT
-        });
+            //Update Invoice Amount Difference
+            invoiceLineToUpdate.Amount = request.Amount;
+            double amountDifference = request.Amount.Value - invoiceLineToUpdate.Amount.Value;
+            invoiceLineToUpdate.Invoice.Amount += amountDifference;
+        }
+
+        if (request.VAT != null) invoiceLineToUpdate.VAT = request.VAT;
+
+        var updateResponse = await _invoiceLineRepository.Update(invoiceLineToUpdate);
 
         if (!updateResponse.IsSuccess) return updateResponse.Error;
         return new UpdateInvoiceLineCommandResponse(updateResponse.Value);

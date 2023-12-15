@@ -2,6 +2,7 @@
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.InvoiceLines;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
 
@@ -14,53 +15,42 @@ public class MySqlInvoiceLineRepository : IInvoiceLineRepository
         _context = context;
     }
 
-    public async Task<Result<InvoiceLine>> CreateInvoiceLine(InvoiceLine newInvoiceLine)
+    public async Task<Result<IEnumerable<InvoiceLine>>> Filter(Expression<Func<InvoiceLine, bool>> query)
     {
-        newInvoiceLine.Invoice.Amount += newInvoiceLine.Amount.Value;
-
-        _context.InvoiceLines.Add(newInvoiceLine);
-        var result = await _context.SaveChangesAsync();
-        if (result != 2) return new DatabaseException("Error storing invoice line into database");
-        return newInvoiceLine;
+        var invoiceLines = await _context.InvoiceLines
+            .Include(il => il.Invoice)
+            .Where(query).ToListAsync();
+        return invoiceLines;
     }
 
-    public async Task<Result<InvoiceLine>> DeleteInvoiceLine(uint id)
+    public async Task<Result<InvoiceLine>> GetById(uint id)
     {
-        var invoiceLine = await GetInvoiceLineById(id);
-        if (!invoiceLine.IsSuccess) return invoiceLine.Error;
-
-        invoiceLine.Value.Invoice.Amount -= invoiceLine.Value.Amount.Value;
-
-        _context.Remove(invoiceLine.Value);
-
-        var result = await _context.SaveChangesAsync();
-        if (result != 2) return new DatabaseException($"Error deleting business Id:{id}");
-        return invoiceLine.Value;
-    }
-
-    public async Task<Result<InvoiceLine>> GetInvoiceLineById(uint id)
-    {
-        var invoiceLine = await _context.InvoiceLines.Include(il => il.Invoice).SingleAsync(b => b.Id == id);
+        var invoiceLine = await _context.InvoiceLines.Include(il => il.Invoice).FirstOrDefaultAsync(b => b.Id == id);
         if (invoiceLine is null) return new IdNotFoundException(id);
         return invoiceLine;
     }
 
-    public async Task<Result<InvoiceLine>> UpdateInvoiceLine(InvoiceLine newInvoiceLine)
+    public async Task<Result<InvoiceLine>> Create(InvoiceLine newEntity)
     {
-        var businessToUpdate = await GetInvoiceLineById(newInvoiceLine.Id);
-        if (!businessToUpdate.IsSuccess) return businessToUpdate.Error;
-
-        if (newInvoiceLine.Amount != null) 
-        {
-            businessToUpdate.Value.Amount = newInvoiceLine.Amount;
-            double amountDifference = newInvoiceLine.Amount.Value - businessToUpdate.Value.Amount.Value;
-            businessToUpdate.Value.Invoice.Amount += amountDifference;
-        }
-
-        if (newInvoiceLine.VAT != null) businessToUpdate.Value.VAT = newInvoiceLine.VAT;
-
+        _context.Set<InvoiceLine>().Add(newEntity);
         var result = await _context.SaveChangesAsync();
-        if (result < 1) return new DatabaseException($"Invoice line with Id:{newInvoiceLine.Id} could not be updated");
-        return businessToUpdate;
+        if (result < 1) return new DatabaseException("Error storing business into database");
+        return newEntity;
+    }
+
+    public async Task<Result<InvoiceLine>> Delete(InvoiceLine entity)
+    {
+        var entityDeleted = _context.Set<InvoiceLine>().Remove(entity);
+        var result = await _context.SaveChangesAsync();
+        if (result < 1) return new DatabaseException($"Error deleting business Id:{entity.Id}");
+        return entityDeleted.Entity;
+    }
+
+    public async Task<Result<InvoiceLine>> Update(InvoiceLine element)
+    {
+        var updateElement = _context.Entry(element);
+        updateElement.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return updateElement.Entity;
     }
 }

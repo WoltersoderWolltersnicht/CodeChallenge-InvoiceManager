@@ -25,21 +25,26 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
 
     public async Task<Result<CreateInvoiceCommandResponse>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
-        var getBusinessResponse = await _businessRepository.GetBusinessById(request.BusinessId);
+        var getBusinessResponse = await _businessRepository.GetById(request.BusinessId);
         if (!getBusinessResponse.IsSuccess) return getBusinessResponse.Error;
 
         var personResponse = await ValidatePersonAndCreateIfNotExsits(request.Person);
         if (!personResponse.IsSuccess) return personResponse.Error;
 
-        var createInvoiceResponse = await _invoiceRepository.CreateInvoice(new Invoice()
+        var createInvoiceResponse = await _invoiceRepository.Create(new Invoice()
         {
-            GUID = new Guid().ToString(),
+            GUID = Guid.NewGuid().ToString(),
             Estado = request.Status,
             Business = getBusinessResponse.Value,
             Number = request.Number,
             Person = personResponse.Value,
             VAT = request.VAT,
-            Amount = request.Amount
+            Amount = request.InvoiceLines.Sum(il => il.InvoiceLineAmount),
+            InvoiceLines = request.InvoiceLines.Select(il => new InvoiceLine()
+            {
+                Amount = il.InvoiceLineAmount,
+                VAT = il.InvoiceLineVAT
+            }).ToList()
         });
 
         if (!createInvoiceResponse.IsSuccess) return createInvoiceResponse.Error;
@@ -50,11 +55,11 @@ public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand,
     {
         if (person.Id != null)
         {
-            var getPersonResponse = await _personRepository.GetPersonById(person.Id.Value);
+            var getPersonResponse = await _personRepository.GetById(person.Id.Value);
             if (getPersonResponse.IsSuccess) return getPersonResponse;
         }
 
-        var createPersonResult = await _personRepository.CreatePerson(new Domain.People.Person()
+        var createPersonResult = await _personRepository.Create(new Person()
         {
             Name = person.Name,
             Surname1 = person.Surname1,

@@ -56,9 +56,17 @@ public class InvoiceManagerDbContext : DbContext
             invoice.Property(i => i.Amount).HasColumnName("Importe");
             invoice.Property(i => i.VAT).HasColumnName("IVA");
 
-            invoice.HasOne(i => i.Business).WithMany(b => b.Invoices).HasForeignKey("IdEmpresa").IsRequired().OnDelete(DeleteBehavior.NoAction);
-            invoice.HasOne(i => i.Person).WithMany(p => p.Invoices).HasForeignKey("IdPersona").OnDelete(DeleteBehavior.NoAction);
-            invoice.HasMany(i => i.InvoiceLines).WithOne(il => il.Invoice).HasForeignKey("IdFactura").IsRequired().OnDelete(DeleteBehavior.Cascade);
+            invoice.HasOne(i => i.Business)
+                    .WithMany(b => b.Invoices)
+                    .HasForeignKey("IdEmpresa").OnDelete(DeleteBehavior.Cascade);
+            
+            invoice.HasOne(i => i.Person)
+            .WithMany(p => p.Invoices)
+            .HasForeignKey("IdPersona").OnDelete(DeleteBehavior.NoAction);
+
+            invoice.HasMany(i => i.InvoiceLines)
+                   .WithOne(il => il.Invoice)
+                   .HasForeignKey("IdFactura").OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

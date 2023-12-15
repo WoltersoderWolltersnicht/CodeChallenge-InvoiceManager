@@ -1,4 +1,5 @@
 ﻿using InvoiceManager.Application.Handler.People.CreatePerson;
+using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.People;
 using MediatR;
@@ -16,8 +17,12 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, R
 
     public async Task<Result<DeletePersonCommandResponse>> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
     {
-        var deleteResponse = await _personRepository.DeletePerson(request.Id);
+        var personToDeleteResult = await _personRepository.GetById(request.Id);
+        if (!personToDeleteResult.IsSuccess) return personToDeleteResult.Error;
+
+
+        var deleteResponse = await _personRepository.Delete(personToDeleteResult.Value);
         if (!deleteResponse.IsSuccess) return deleteResponse.Error;
-        return new DeletePersonCommandResponse(deleteResponse.Value);
+        return new DeletePersonCommandResponse(personToDeleteResult.Value);
     }
 }

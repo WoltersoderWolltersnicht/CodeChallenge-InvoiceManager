@@ -2,6 +2,7 @@
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
 
@@ -14,38 +15,50 @@ public class MySqlInvoiceRepository : IInvoiceRepository
         _context = context;
     }
 
-    public async Task<Result<Invoice>> CreateInvoice(Invoice newInvoice)
+    public async Task<Result<IEnumerable<Invoice>>> Filter(Expression<Func<Invoice, bool>> query)
     {
-        _context.Invoices.Add(newInvoice);
-        var result = await _context.SaveChangesAsync();
-        if (result != 1) return new DatabaseException("Error storing invoice into database");
-        return newInvoice;
+        var invoices = await _context
+            .Invoices.Include(i => i.Person)
+            .Include(i => i.Business)
+            .Include(i => i.InvoiceLines).Where(query).ToListAsync();
+        
+        return invoices;
     }
 
-    public async Task<Result<Invoice>> DeleteInvoice(uint id)
-    {
-        var invoice = await GetInvoiceById(id);
-        if (!invoice.IsSuccess) return invoice.Error;
-        _context.Remove(invoice);
-        var result = await _context.SaveChangesAsync();
-        if (result != 1) return new DatabaseException($"Error deleting invoice Id:{id}");
-        return invoice.Value;
-    }
 
-    public async Task<Result<Invoice>> GetInvoiceById(uint id)
+    public async Task<Result<Invoice>> GetById(uint id)
     {
-        var business = await _context.Invoices.Include(i => i.Person).Include(i => i.Business).Include(i => i.InvoiceLines).FirstOrDefaultAsync(b => b.Id == id);
+        var business = await _context.Invoices
+            .Include(i => i.Person)
+            .Include(i => i.Business)
+            .Include(i => i.InvoiceLines)
+            .FirstOrDefaultAsync(b => b.Id == id);
+
         if (business is null) return new IdNotFoundException(id);
         return business;
     }
 
-    public async Task<Result<Invoice>> UpdateInvoice(Invoice newInvoice)
+    public async Task<Result<Invoice>> Create(Invoice newEntity)
     {
-        var invoiceToUpdate = await GetInvoiceById(newInvoice.Id);
-        if (!invoiceToUpdate.IsSuccess) return invoiceToUpdate.Error;
-        if (newInvoice.Estado != null) invoiceToUpdate.Value.Estado = newInvoice.Estado;
+        _context.Set<Invoice>().Add(newEntity);
         var result = await _context.SaveChangesAsync();
-        if (result != 1) return new DatabaseException($"Invoice with Id:{newInvoice.Id} could not be updated");
-        return newInvoice;
+        if (result < 1) return new DatabaseException("Error storing business into database");
+        return newEntity;
+    }
+
+    public async Task<Result<Invoice>> Delete(Invoice entity)
+    {
+        var entityDeleted = _context.Set<Invoice>().Remove(entity);
+        var result = await _context.SaveChangesAsync();
+        if (result < 1) return new DatabaseException($"Error deleting business Id:{entity.Id}");
+        return entityDeleted.Entity;
+    }
+
+    public async Task<Result<Invoice>> Update(Invoice element)
+    {
+        var updateElement = _context.Entry(element);
+        updateElement.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return updateElement.Entity;
     }
 }

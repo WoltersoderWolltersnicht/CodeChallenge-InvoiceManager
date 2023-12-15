@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Application.Handler.Businesses.DeleteBusiness;
-using InvoiceManager.Domain.Businesses;
+﻿using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Common;
 using MediatR;
 
@@ -16,7 +15,7 @@ public class GetBusinessQueryHandler : IRequestHandler<GetBusinessQuery, Result<
 
     public async Task<Result<GetBusinessQueryResponse>> Handle(GetBusinessQuery request, CancellationToken cancellationToken)
     {
-        var getResponse = await _businessRepository.GetBusinessById(request.Id);
+        var getResponse = await _businessRepository.GetById(request.Id);
         if (!getResponse.IsSuccess) return getResponse.Error;
         return new GetBusinessQueryResponse(getResponse.Value);
     }

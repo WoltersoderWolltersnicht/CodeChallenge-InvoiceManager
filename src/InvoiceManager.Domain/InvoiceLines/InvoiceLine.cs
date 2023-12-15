@@ -1,10 +1,10 @@
-﻿using InvoiceManager.Domain.Invoices;
+﻿using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Invoices;
 
 namespace InvoiceManager.Domain.InvoiceLines;
 
-public class InvoiceLine
+public class InvoiceLine : Entity
 {
-    public uint Id { get; set; }
     public uint? VAT { get; set; }
     public double? Amount { get; set; }
     public Invoice Invoice { get; set; }

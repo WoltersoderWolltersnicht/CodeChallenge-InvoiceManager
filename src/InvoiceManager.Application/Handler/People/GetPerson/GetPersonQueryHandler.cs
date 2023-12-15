@@ -16,7 +16,7 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, Result<GetP
 
     public async Task<Result<GetPersonQueryResponse>> Handle(GetPersonQuery request, CancellationToken cancellationToken)
     {
-        var getResponse = await _personRepository.GetPersonById(request.Id);
+        var getResponse = await _personRepository.GetById(request.Id);
         if (!getResponse.IsSuccess) return getResponse.Error;
         return new GetPersonQueryResponse(getResponse.Value);
     }

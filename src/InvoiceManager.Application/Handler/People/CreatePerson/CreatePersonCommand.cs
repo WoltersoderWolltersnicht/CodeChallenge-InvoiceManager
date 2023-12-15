@@ -1,7 +1,6 @@
 ﻿using InvoiceManager.Domain.Common;
-using InvoiceManager.Domain.People;
 using MediatR;
 
 namespace InvoiceManager.Application.Handler.People.CreatePerson;
 
-public record CreatePersonCommand(Person Person) : IRequest<Result<CreatePersonCommandResponse>>;
+public record CreatePersonCommand(string NIF, string Name, string Surname1, string Surname2) : IRequest<Result<CreatePersonCommandResponse>>;

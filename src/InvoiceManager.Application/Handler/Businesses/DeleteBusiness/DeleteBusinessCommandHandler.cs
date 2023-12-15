@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Application.Handler.Businesses.CreateBusiness;
-using InvoiceManager.Domain.Businesses;
+﻿using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Common;
 using MediatR;
 
@@ -16,8 +15,11 @@ public class DeleteBusinessCommandHandler : IRequestHandler<DeleteBusinessComman
 
     public async Task<Result<DeleteBusinessCommandResponse>> Handle(DeleteBusinessCommand request, CancellationToken cancellationToken)
     {
-        var deleteResponse = await _businessRepository.DeleteBusiness(request.Id);
+        var businessToDeleteResult = await _businessRepository.GetById(request.Id);
+        if (!businessToDeleteResult.IsSuccess) return businessToDeleteResult.Error;
+
+        var deleteResponse = await _businessRepository.Delete(businessToDeleteResult.Value);
         if (!deleteResponse.IsSuccess) return deleteResponse.Error;
-        return new DeleteBusinessCommandResponse(deleteResponse.Value);
+        return new DeleteBusinessCommandResponse(businessToDeleteResult.Value);
     }
 }

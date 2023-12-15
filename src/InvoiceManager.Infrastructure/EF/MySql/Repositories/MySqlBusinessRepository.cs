@@ -2,6 +2,7 @@
 using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
 
@@ -14,26 +15,16 @@ public class MySqlBusinessRepository : IBusinessRepository
         _context = context;
     }
 
-    public async Task<Result<Business>> CreateBusiness(Business newBusiness)
+    public async Task<Result<IEnumerable<Business>>> Filter(Expression<Func<Business, bool>> query)
     {
-        _context.Business.Add(newBusiness);
-        var result = await _context.SaveChangesAsync();
-        if (result != 1) return new DatabaseException("Error storing business into database");
-        return newBusiness;
+        var businesses = await _context.Business
+            .Include(b => b.Invoices).ThenInclude(i => i.InvoiceLines)
+            .Include(b => b.Invoices).ThenInclude(i => i.Person)
+            .Where(query).ToListAsync();
+        return businesses;
     }
 
-    public async Task<Result<Business>> DeleteBusiness(uint id)
-    {
-        var entityToDelete = await GetBusinessById(id);
-        if (!entityToDelete.IsSuccess) return entityToDelete.Error;
-
-        var entityDeleted = _context.Remove(entityToDelete);
-        var result = await _context.SaveChangesAsync();
-        if (result != 1) return new DatabaseException($"Error deleting business Id:{id}");
-        return entityDeleted.Entity;
-    }
-
-    public async Task<Result<Business>> GetBusinessById(uint id)
+    public async Task<Result<Business>> GetById(uint id)
     {
         var business = await _context.Business
             .Include(b => b.Invoices).ThenInclude(i => i.InvoiceLines)
@@ -44,15 +35,27 @@ public class MySqlBusinessRepository : IBusinessRepository
         return business;
     }
 
-    public async Task<Result<Business>> UpdateBusiness(Business newBusiness)
+    public async Task<Result<Business>> Create(Business newEntity)
     {
-        var businessToUpdate = await GetBusinessById(newBusiness.Id);
-        if (!businessToUpdate.IsSuccess) return businessToUpdate.Error;
-        
-        if(newBusiness.Name != null) businessToUpdate.Value.Name = newBusiness.Name;
-        if (newBusiness.CIF != null) businessToUpdate.Value.CIF = newBusiness.CIF;
+        _context.Set<Business>().Add(newEntity);
         var result = await _context.SaveChangesAsync();
-        if(result != 1) return new DatabaseException("Business with Id:{newBusiness.Id} could not be updated");
-        return businessToUpdate;
+        if (result < 1) return new DatabaseException("Error storing business into database");
+        return newEntity;
+    }
+
+    public async Task<Result<Business>> Delete(Business entity)
+    {
+        var entityDeleted = _context.Set<Business>().Remove(entity);
+        var result = await _context.SaveChangesAsync();
+        if (result < 1) return new DatabaseException($"Error deleting business Id:{entity.Id}");
+        return entityDeleted.Entity;
+    }
+
+    public async Task<Result<Business>> Update(Business element)
+    {
+        var updateElement = _context.Entry(element);
+        updateElement.State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return updateElement.Entity;
     }
 }

@@ -18,13 +18,16 @@ public class CreateInvoiceLineCommandHandler : IRequestHandler<CreateInvoiceLine
 
     public async Task<Result<CreateInvoiceLineCommandResponse>> Handle(CreateInvoiceLineCommand request, CancellationToken cancellationToken)
     {
-        var getInvoiceResponse = await _invoiceRepository.GetInvoiceById(request.InvoiceId);
+        var getInvoiceResponse = await _invoiceRepository.GetById(request.InvoiceId);
         if (!getInvoiceResponse.IsSuccess) return getInvoiceResponse.Error;
-            
-        var createInvoiceLineResponse = await _invoiceLineRepository.CreateInvoiceLine(new InvoiceLine()
+
+        var invoice = getInvoiceResponse.Value;
+        invoice.Amount += request.InvoiceLineAmount;
+
+        var createInvoiceLineResponse = await _invoiceLineRepository.Create(new InvoiceLine()
         {
             Amount = request.InvoiceLineAmount,
-            Invoice = getInvoiceResponse.Value,
+            Invoice = invoice,
             VAT = request.InvoiceLineVAT
         });
 

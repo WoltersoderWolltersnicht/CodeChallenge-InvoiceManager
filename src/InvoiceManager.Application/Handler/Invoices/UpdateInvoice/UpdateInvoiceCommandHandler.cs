@@ -15,12 +15,14 @@ public class GetInvoiceQueryHandler : IRequestHandler<UpdateInvoiceCommand, Resu
 
     public async Task<Result<UpdateInvoiceCommandResponse>> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
     {
-        var updateResponse = await _invoiceRepository.UpdateInvoice(new Invoice()
-        {
-            Id = request.Id,
-            Estado = request.InvoiceStatus
-        });
+        var getInvoiceResult = await _invoiceRepository.GetById(request.Id);
+        if (!getInvoiceResult.IsSuccess) return getInvoiceResult.Error;
 
+        var invoiceToUpdate = getInvoiceResult.Value;
+
+        if(request.InvoiceStatus != null) invoiceToUpdate.Estado = request.InvoiceStatus.Value;
+        
+        var updateResponse = await _invoiceRepository.Update(invoiceToUpdate);
         if (!updateResponse.IsSuccess) return updateResponse.Error;
         return new UpdateInvoiceCommandResponse(updateResponse.Value);
     }

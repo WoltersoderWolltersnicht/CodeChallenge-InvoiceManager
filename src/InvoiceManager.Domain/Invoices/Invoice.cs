@@ -1,12 +1,12 @@
 ﻿using InvoiceManager.Domain.Businesses;
+using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.InvoiceLines;
 using InvoiceManager.Domain.People;
 
 namespace InvoiceManager.Domain.Invoices;
 
-public class Invoice
+public class Invoice : Entity
 {
-    public uint Id { get; set; }
     public string GUID { get; set; }
     public string Number { get; set; }
     public double Amount { get; set; }

@@ -11,12 +11,12 @@ public static class InvoiceMapper
         {
             Id = invoice.Id,
             Amount = invoice.Amount,
-            BusinessId = invoice.Business.Id,
+            BusinessId = invoice?.Business?.Id,
             Estado = invoice.Estado,
             GUID = invoice.GUID,
             InvoiceLines = invoice.InvoiceLines?.Select(InvoiceLineMapper.Map)?.ToList(),
             Number = invoice.Number,
-            PersonId = invoice.Person.Id,
+            PersonId = invoice?.Person?.Id,
             VAT = invoice.VAT,
         };
     }

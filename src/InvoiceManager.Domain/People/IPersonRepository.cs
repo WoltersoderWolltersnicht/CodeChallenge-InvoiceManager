@@ -1,11 +1,14 @@
-﻿using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Businesses;
+using InvoiceManager.Domain.Common;
+using System.Linq.Expressions;
 
 namespace InvoiceManager.Domain.People;
 
 public interface IPersonRepository
 {
-    public Task<Result<Person>> GetPersonById(uint id);
-    public Task<Result<Person>> CreatePerson(Person newPerson);
-    public Task<Result<Person>> UpdatePerson(Person newPerson);
-    public Task<Result<Person>> DeletePerson(uint id);
+    public Task<Result<Person>> GetById(uint id);
+    public Task<Result<Person>> Create(Person person);
+    public Task<Result<Person>> Update(Person person);
+    public Task<Result<Person>> Delete(Person person);
+    public Task<Result<IEnumerable<Person>>> Filter(Expression<Func<Person, bool>> query);
 }

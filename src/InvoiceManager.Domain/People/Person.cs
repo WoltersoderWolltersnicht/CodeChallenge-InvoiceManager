@@ -1,10 +1,10 @@
-﻿using InvoiceManager.Domain.Invoices;
+﻿using InvoiceManager.Domain.Common;
+using InvoiceManager.Domain.Invoices;
 
 namespace InvoiceManager.Domain.People;
 
-public class Person
+public class Person : Entity
 {
-    public uint Id { get; set; }
     public string Name { get; set; }
     public string Surname1 { get; set; }
     public string Surname2 { get; set; }

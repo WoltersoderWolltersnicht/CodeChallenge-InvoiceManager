@@ -21,10 +21,11 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PersonRs>> Get(uint id)
+    public async Task<IActionResult> Get(uint id)
     {
         var queryResponse = await _mediator.Send(new GetPersonQuery(id));
-        return PersonMapper.Map(queryResponse.Value.Person);
+        if (!queryResponse.IsSuccess) return AdviseMessageMapper.Map(queryResponse.Error);
+        return Ok(PersonMapper.Map(queryResponse.Value.Person));
     }
 
     [HttpPost]
@@ -36,16 +37,18 @@ public class PersonController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<PersonRs>> Delete(uint id)
+    public async Task<IActionResult> Delete(uint id)
     {
         var commandResponse = await _mediator.Send(new DeletePersonCommand(id));
-        return PersonMapper.Map(commandResponse.Value.Person);
+        if (!commandResponse.IsSuccess) return AdviseMessageMapper.Map(commandResponse.Error);
+        return Ok(PersonMapper.Map(commandResponse.Value.Person));
     }
 
     [HttpPut]
-    public async Task<ActionResult<PersonRs>> Put([FromBody] UpdatePersonCommand createCommand)
+    public async Task<IActionResult> Put([FromBody] UpdatePersonCommand createCommand)
     {
         var commandResponse = await _mediator.Send(createCommand);
-        return PersonMapper.Map(commandResponse.Value.Person);
+        if (!commandResponse.IsSuccess) return AdviseMessageMapper.Map(commandResponse.Error);
+        return Ok(PersonMapper.Map(commandResponse.Value.Person));
     }
 }

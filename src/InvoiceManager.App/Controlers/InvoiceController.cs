@@ -21,30 +21,34 @@ public class InvoiceController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<InvoiceRs>> Get(uint id)
+    public async Task<IActionResult> Get(uint id)
     {
         var queryResult = await _mediator.Send(new GetInvoiceQuery(id));
-        return InvoiceMapper.Map(queryResult.Value.Invoice);
+        if (!queryResult.IsSuccess) return AdviseMessageMapper.Map(queryResult.Error);
+        return Ok(InvoiceMapper.Map(queryResult.Value.Invoice));
     }
 
     [HttpPost]
-    public async Task<ActionResult<InvoiceRs>> Post([FromBody] CreateInvoiceCommand createCommand)
+    public async Task<IActionResult> Post([FromBody] CreateInvoiceCommand createCommand)
     {
         var commandResult = await _mediator.Send(createCommand);
-        return InvoiceMapper.Map(commandResult.Value.Invoice);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(InvoiceMapper.Map(commandResult.Value.Invoice));
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<InvoiceRs>> Delete(uint id)
+    public async Task<IActionResult> Delete(uint id)
     {
         var commandResult = await _mediator.Send(new DeleteInvoiceCommand(id));
-        return InvoiceMapper.Map(commandResult.Value.Invoice);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(InvoiceMapper.Map(commandResult.Value.Invoice));
     }
 
     [HttpPut]
-    public async Task<ActionResult<InvoiceRs>> Put([FromBody] UpdateInvoiceCommand createCommand)
+    public async Task<IActionResult> Put([FromBody] UpdateInvoiceCommand createCommand)
     {
         var commandResult = await _mediator.Send(createCommand);
-        return InvoiceMapper.Map(commandResult.Value.Invoice);
+        if (!commandResult.IsSuccess) return AdviseMessageMapper.Map(commandResult.Error);
+        return Ok(InvoiceMapper.Map(commandResult.Value.Invoice));
     }
 }

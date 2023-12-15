@@ -7,5 +7,5 @@ public class InvoiceLineRs
     public uint Id { get; set; }
     public uint? VAT { get; set; }
     public double? Amount { get; set; }
-    public uint InvoiceId { get; set; }
+    public uint? InvoiceId { get; set; }
 }

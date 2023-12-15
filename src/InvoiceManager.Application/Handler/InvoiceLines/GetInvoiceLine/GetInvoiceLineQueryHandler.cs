@@ -1,5 +1,4 @@
-﻿using InvoiceManager.Application.Handler.InvoiceLines.DeleteInvoiceLine;
-using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Common;
 using InvoiceManager.Domain.InvoiceLines;
 using MediatR;
 
@@ -16,7 +15,7 @@ public class GetInvoiceLineQueryHandler : IRequestHandler<GetInvoiceLineQuery, R
 
     public async Task<Result<GetInvoiceLineQueryResponse>> Handle(GetInvoiceLineQuery request, CancellationToken cancellationToken)
     {
-        var getResponse = await _invoiceLineRepository.GetInvoiceLineById(request.Id);
+        var getResponse = await _invoiceLineRepository.GetById(request.Id);
         if (!getResponse.IsSuccess) return getResponse.Error;
         return new GetInvoiceLineQueryResponse(getResponse.Value);
     }

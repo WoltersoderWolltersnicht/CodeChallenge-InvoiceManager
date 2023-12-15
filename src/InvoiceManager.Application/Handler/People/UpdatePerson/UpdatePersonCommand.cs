@@ -4,4 +4,4 @@ using MediatR;
 
 namespace InvoiceManager.Application.Handler.People.UpdatePerson;
 
-public record UpdatePersonCommand(Person Person) : IRequest<Result<UpdatePersonCommandResponse>>;
+public record UpdatePersonCommand(uint Id, string Name, string Surname1, string Surname2, string NIF) : IRequest<Result<UpdatePersonCommandResponse>>;

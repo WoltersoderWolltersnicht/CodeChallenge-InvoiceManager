@@ -10,8 +10,8 @@ public class InvoiceRs
     public string Number { get; set; }
     public double Amount { get; set; }
     public uint VAT { get; set; }
-    public uint BusinessId { get; set; }
-    public uint PersonId { get; set; }
+    public uint? BusinessId { get; set; }
+    public uint? PersonId { get; set; }
     public InvoiceStatusEnum Estado { get; set; }
     public List<InvoiceLineRs> InvoiceLines { get; set; }
 }

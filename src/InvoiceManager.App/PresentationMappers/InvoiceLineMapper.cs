@@ -11,7 +11,7 @@ public static class InvoiceLineMapper
         {
             Id = invoiceLine.Id,
             Amount = invoiceLine.Amount,
-            InvoiceId = invoiceLine.Invoice.Id,
+            InvoiceId = invoiceLine?.Invoice?.Id,
             VAT = invoiceLine.VAT
         };
     }

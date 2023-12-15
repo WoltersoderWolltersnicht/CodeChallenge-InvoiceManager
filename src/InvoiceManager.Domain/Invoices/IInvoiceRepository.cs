@@ -1,11 +1,15 @@
-﻿using InvoiceManager.Domain.Common;
+﻿using InvoiceManager.Domain.Businesses;
+using InvoiceManager.Domain.Common;
+using System.Linq.Expressions;
 
 namespace InvoiceManager.Domain.Invoices;
 
 public interface IInvoiceRepository
 {
-    public Task<Result<Invoice>> GetInvoiceById(uint id);
-    public Task<Result<Invoice>> CreateInvoice(Invoice newInvoice);
-    public Task<Result<Invoice>> UpdateInvoice(Invoice newInvoice);
-    public Task<Result<Invoice>> DeleteInvoice(uint id);
+    public Task<Result<Invoice>> GetById(uint id);
+    public Task<Result<Invoice>> Create(Invoice invoice);
+    public Task<Result<Invoice>> Update(Invoice invoice);
+    public Task<Result<Invoice>> Delete(Invoice invoice);
+    public Task<Result<IEnumerable<Invoice>>> Filter(Expression<Func<Invoice, bool>> query);
+
 }

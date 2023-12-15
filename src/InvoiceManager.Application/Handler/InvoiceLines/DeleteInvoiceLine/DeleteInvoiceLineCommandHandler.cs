@@ -15,7 +15,13 @@ public class DeleteInvoiceLineCommandHandler : IRequestHandler<DeleteInvoiceLine
 
     public async Task<Result<DeleteInvoiceLineCommandResponse>> Handle(DeleteInvoiceLineCommand request, CancellationToken cancellationToken)
     {
-        var deleteResponse = await _invoiceLineRepository.DeleteInvoiceLine(request.Id);
+        var getInvoiceLineResponse = await _invoiceLineRepository.GetById(request.Id);
+        if (!getInvoiceLineResponse.IsSuccess) return getInvoiceLineResponse.Error;
+
+        var invoiceLineToDelete = getInvoiceLineResponse.Value;
+        invoiceLineToDelete.Invoice.Amount -= invoiceLineToDelete.Amount.Value;
+
+        var deleteResponse = await _invoiceLineRepository.Delete(getInvoiceLineResponse.Value);
         if (!deleteResponse.IsSuccess) return deleteResponse.Error;
         return new DeleteInvoiceLineCommandResponse(deleteResponse.Value);
     }
