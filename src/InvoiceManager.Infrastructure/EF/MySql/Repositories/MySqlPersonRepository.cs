@@ -28,7 +28,7 @@ public class MySqlPersonRepository : IPersonRepository
             .Include(p => p.Invoices).ThenInclude(i => i.Business)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (person is null) return new IdNotFoundException(id);
+        if (person is null) return new IdNotFoundException("Person", id);
         return person;
     }
 

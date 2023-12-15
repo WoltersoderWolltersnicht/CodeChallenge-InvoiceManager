@@ -34,7 +34,7 @@ public class MySqlInvoiceRepository : IInvoiceRepository
             .Include(i => i.InvoiceLines)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (business is null) return new IdNotFoundException(id);
+        if (business is null) return new IdNotFoundException("Invoice", id);
         return business;
     }
 

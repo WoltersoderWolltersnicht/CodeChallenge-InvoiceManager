@@ -31,7 +31,7 @@ public class MySqlBusinessRepository : IBusinessRepository
             .Include(b => b.Invoices).ThenInclude(i => i.Person)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (business is null) return new IdNotFoundException(id);
+        if (business is null) return new IdNotFoundException("Business", id);
         return business;
     }
 

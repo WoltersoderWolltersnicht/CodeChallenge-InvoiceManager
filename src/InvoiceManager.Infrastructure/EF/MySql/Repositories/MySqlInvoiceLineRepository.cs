@@ -26,7 +26,7 @@ public class MySqlInvoiceLineRepository : IInvoiceLineRepository
     public async Task<Result<InvoiceLine>> GetById(uint id)
     {
         var invoiceLine = await _context.InvoiceLines.Include(il => il.Invoice).FirstOrDefaultAsync(b => b.Id == id);
-        if (invoiceLine is null) return new IdNotFoundException(id);
+        if (invoiceLine is null) return new IdNotFoundException("InvoiceLine", id);
         return invoiceLine;
     }
 
