@@ -4,13 +4,13 @@ using InvoiceManager.Domain.Invoices;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
+namespace InvoiceManager.Infrastructure.EF.Repositories;
 
-public class MySqlInvoiceRepository : IInvoiceRepository
+public class EFInvoiceRepository : IInvoiceRepository
 {
     private readonly InvoiceManagerDbContext _context;
 
-    public MySqlInvoiceRepository(InvoiceManagerDbContext context)
+    public EFInvoiceRepository(InvoiceManagerDbContext context)
     {
         _context = context;
     }
@@ -21,7 +21,7 @@ public class MySqlInvoiceRepository : IInvoiceRepository
             .Invoices.Include(i => i.Person)
             .Include(i => i.Business)
             .Include(i => i.InvoiceLines).Where(query).ToListAsync();
-        
+
         return invoices;
     }
 

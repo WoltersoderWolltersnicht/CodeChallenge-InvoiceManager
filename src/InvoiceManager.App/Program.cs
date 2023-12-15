@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.UseMySqlDatabase(builder.Configuration);
-builder.Services.UseMySqlRepositories();
+builder.Services.AddRepositories();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(BaseHandler).Assembly));
 

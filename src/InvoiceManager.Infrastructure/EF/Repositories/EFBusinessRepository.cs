@@ -4,13 +4,13 @@ using InvoiceManager.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
+namespace InvoiceManager.Infrastructure.EF.Repositories;
 
-public class MySqlBusinessRepository : IBusinessRepository
+public class EFBusinessRepository : IBusinessRepository
 {
     private readonly InvoiceManagerDbContext _context;
 
-    public MySqlBusinessRepository(InvoiceManagerDbContext context)
+    public EFBusinessRepository(InvoiceManagerDbContext context)
     {
         _context = context;
     }
@@ -53,8 +53,7 @@ public class MySqlBusinessRepository : IBusinessRepository
 
     public async Task<Result<Business>> Update(Business element)
     {
-        var updateElement = _context.Entry(element);
-        updateElement.State = EntityState.Modified;
+        var updateElement = _context.Update(element);
         await _context.SaveChangesAsync();
         return updateElement.Entity;
     }

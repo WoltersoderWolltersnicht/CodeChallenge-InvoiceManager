@@ -1,6 +1,4 @@
 ﻿using InvoiceManager.App.PresentationDto.Businesses;
-using InvoiceManager.App.PresentationDto.InvoiceLines;
-using InvoiceManager.App.PresentationDto.Invoices;
 using InvoiceManager.Domain.Businesses;
 
 namespace InvoiceManager.App.PresentationMappers;

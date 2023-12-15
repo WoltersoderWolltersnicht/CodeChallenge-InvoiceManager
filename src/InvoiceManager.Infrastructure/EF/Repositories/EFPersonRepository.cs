@@ -4,13 +4,13 @@ using InvoiceManager.Domain.People;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace InvoiceManager.Infrastructure.EF.MySql.Repositories;
+namespace InvoiceManager.Infrastructure.EF.Repositories;
 
-public class MySqlPersonRepository : IPersonRepository
+public class EFPersonRepository : IPersonRepository
 {
     private readonly InvoiceManagerDbContext _context;
 
-    public MySqlPersonRepository(InvoiceManagerDbContext context)
+    public EFPersonRepository(InvoiceManagerDbContext context)
     {
         _context = context;
     }

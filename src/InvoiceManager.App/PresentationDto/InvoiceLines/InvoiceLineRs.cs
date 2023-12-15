@@ -1,6 +1,4 @@
-﻿using InvoiceManager.Domain.Invoices;
-
-namespace InvoiceManager.App.PresentationDto.InvoiceLines;
+﻿namespace InvoiceManager.App.PresentationDto.InvoiceLines;
 
 public class InvoiceLineRs
 {

@@ -1,5 +1,4 @@
-﻿using InvoiceManager.App.PresentationDto.People;
-using InvoiceManager.App.PresentationMappers;
+﻿using InvoiceManager.App.PresentationMappers;
 using InvoiceManager.Application.Handler.People.CreatePerson;
 using InvoiceManager.Application.Handler.People.DeletePerson;
 using InvoiceManager.Application.Handler.People.GetPerson;
