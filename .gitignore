@@ -22,3 +22,5 @@
 /test/UnitTests/bin/Debug/net7.0
 /test/UnitTests/obj/Debug/net7.0
 /test/UnitTests/obj
+/test/IntegrationTests/bin/Debug/net7.0
+/test/IntegrationTests/obj
