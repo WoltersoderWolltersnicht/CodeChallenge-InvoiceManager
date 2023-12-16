@@ -61,4 +61,19 @@ public class EFInvoiceRepository : IInvoiceRepository
         await _context.SaveChangesAsync();
         return updateElement.Entity;
     }
+
+    public async Task<Result<IEnumerable<Invoice>>> GetByFilter(IEnumerable<uint>? ids, IEnumerable<string>? numbers, IEnumerable<string>? guids)
+    {
+        var business = await _context.Invoices
+           .Include(i => i.Person)
+           .Include(i => i.Business)
+           .Include(i => i.InvoiceLines)
+           .Where(i => ids == null || !ids.Any() || ids.Contains(i.Id))
+           .Where(i => numbers == null || !numbers.Any() || numbers.Contains(i.Number))
+           .Where(i => guids == null || !guids.Any() || guids.Contains(i.GUID)).ToListAsync();
+
+        if(!business.Any()) return new NotFoundException("Invoice Not Found For Selected Filter");
+
+        return business;
+    }
 }

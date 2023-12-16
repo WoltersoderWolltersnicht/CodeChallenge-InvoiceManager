@@ -25,6 +25,7 @@ namespace InvoiceManager.App.PresentationMappers
             if (error.GetType() == typeof(DatabaseException)) return (int)HttpStatusCode.InternalServerError;
             if (error.GetType() == typeof(BadRequestException)) return (int)HttpStatusCode.BadRequest;
             if (error.GetType() == typeof(DupplicateKeyException)) return (int)HttpStatusCode.BadRequest;
+            if (error.GetType() == typeof(NotFoundException)) return (int)HttpStatusCode.BadRequest;
             return null;
         }
     }

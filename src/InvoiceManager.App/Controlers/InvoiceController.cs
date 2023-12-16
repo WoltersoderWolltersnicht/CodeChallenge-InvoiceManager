@@ -1,6 +1,7 @@
 ﻿using InvoiceManager.App.PresentationMappers;
 using InvoiceManager.Application.Handler.Invoices.CreateInvoice;
 using InvoiceManager.Application.Handler.Invoices.DeleteInvoice;
+using InvoiceManager.Application.Handler.Invoices.FilterInvoice;
 using InvoiceManager.Application.Handler.Invoices.GetInvoice;
 using InvoiceManager.Application.Handler.Invoices.UpdateInvoice;
 using MediatR;
@@ -25,6 +26,15 @@ public class InvoiceController : ControllerBase
         var queryResult = await _mediator.Send(new GetInvoiceQuery(id));
         if (!queryResult.IsSuccess) return AdviseMessageMapper.Map(queryResult.Error);
         return Ok(InvoiceMapper.Map(queryResult.Value.Invoice));
+    }
+
+    [HttpPost("Filter")]
+    public async Task<IActionResult> Filter([FromBody] FilterInvoiceQuery filterQuery)
+    {
+        var queryResult = await _mediator.Send(filterQuery);
+        if (!queryResult.IsSuccess) return AdviseMessageMapper.Map(queryResult.Error);
+        var invoicesDto = queryResult.Value.Invoices.Select(InvoiceMapper.Map);
+        return Ok(invoicesDto);
     }
 
     [HttpPost]
