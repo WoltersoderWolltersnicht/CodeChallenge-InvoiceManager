@@ -1,0 +1,43 @@
+CREATE DATABASE `invoicemanager`;
+
+ALTER DATABASE CHARACTER SET utf8mb4;
+
+CREATE TABLE `Empresa` (
+          `IdEmpresa` int unsigned NOT NULL AUTO_INCREMENT,
+          `RazonSocial` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+          `CIF` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+          CONSTRAINT `PK_Empresa` PRIMARY KEY (`IdEmpresa`)
+      ) CHARACTER SET=utf8mb4;
+
+CREATE TABLE `Persona` (
+          `IdPersona` int unsigned NOT NULL AUTO_INCREMENT,
+          `Nombre` longtext CHARACTER SET utf8mb4 NOT NULL,
+          `Apellido1` longtext CHARACTER SET utf8mb4 NOT NULL,
+          `Apellido2` longtext CHARACTER SET utf8mb4 NOT NULL,
+          `NIF` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+          CONSTRAINT `PK_Persona` PRIMARY KEY (`IdPersona`)
+      ) CHARACTER SET=utf8mb4;
+
+
+CREATE TABLE `Factura` (
+          `IdFactura` int unsigned NOT NULL AUTO_INCREMENT,
+          `GUIDFactura` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+          `NumFactura` longtext CHARACTER SET utf8mb4 NOT NULL,
+          `Importe` double NOT NULL,
+          `IVA` int unsigned NOT NULL,
+          `IdEmpresa` int unsigned NOT NULL,
+          `IdPersona` int unsigned NOT NULL,
+          `Estado` int NOT NULL,
+          CONSTRAINT `PK_Factura` PRIMARY KEY (`IdFactura`),
+          CONSTRAINT `FK_Factura_Empresa_IdEmpresa` FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`) ON DELETE CASCADE,
+          CONSTRAINT `FK_Factura_Persona_IdPersona` FOREIGN KEY (`IdPersona`) REFERENCES `Persona` (`IdPersona`)
+      ) CHARACTER SET=utf8mb4;
+
+CREATE TABLE `LineasFactura` (
+          `IDLineaFactura` int unsigned NOT NULL AUTO_INCREMENT,
+          `IVA` int unsigned NULL,
+          `Importe` double NULL,
+          `IdFactura` int unsigned NOT NULL,
+          CONSTRAINT `PK_LineasFactura` PRIMARY KEY (`IDLineaFactura`),
+          CONSTRAINT `FK_LineasFactura_Factura_IdFactura` FOREIGN KEY (`IdFactura`) REFERENCES `Factura` (`IdFactura`) ON DELETE CASCADE
+      ) CHARACTER SET=utf8mb4;
