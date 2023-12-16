@@ -1,13 +1,10 @@
 ﻿using FluentAssertions;
-using InvoiceManager.Application.Handler.Businesses.UpdateBusiness;
-using InvoiceManager.Application.Handler.Invoices.GetInvoice;
 using InvoiceManager.Application.Handler.Invoices.UpdateInvoice;
-using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.UpdateBusiness;
+namespace UnitTests.Handler.Invoices;
 
 public class UpdateInvoiceHandlerTests
 {

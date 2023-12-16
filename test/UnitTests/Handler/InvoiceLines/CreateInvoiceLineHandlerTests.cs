@@ -5,7 +5,7 @@ using InvoiceManager.Domain.InvoiceLines;
 using InvoiceManager.Domain.Invoices;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses;
+namespace UnitTests.Handler.InvoiceLines;
 
 public class CreateInvoiceLineHandlerTests
 {

@@ -5,7 +5,7 @@ using InvoiceManager.Domain.InvoiceLines;
 using InvoiceManager.Domain.Invoices;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.DeleteBusiness;
+namespace UnitTests.Handler.InvoiceLines;
 
 public class DeleteInvoiceLineHandlerTests
 {
@@ -13,7 +13,7 @@ public class DeleteInvoiceLineHandlerTests
     public async Task Ok()
     {
         IInvoiceLineRepository invoiceLineRepository = Substitute.For<IInvoiceLineRepository>();
-        invoiceLineRepository.GetById(default).ReturnsForAnyArgs(x => new InvoiceLine() 
+        invoiceLineRepository.GetById(default).ReturnsForAnyArgs(x => new InvoiceLine()
         {
             Id = (uint)x[0],
             Amount = 50,

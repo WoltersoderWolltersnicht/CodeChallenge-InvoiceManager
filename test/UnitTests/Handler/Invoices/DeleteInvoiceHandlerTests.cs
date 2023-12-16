@@ -4,7 +4,7 @@ using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.DeleteBusiness;
+namespace UnitTests.Handler.Invoices;
 
 public class DeleteInvoiceHandlerTests
 {
@@ -35,7 +35,7 @@ public class DeleteInvoiceHandlerTests
         IInvoiceRepository invoiceRepository = Substitute.For<IInvoiceRepository>();
         invoiceRepository.GetById(default).ReturnsForAnyArgs(x => new IdNotFoundException((uint)x[0]));
         invoiceRepository.Delete(default).ReturnsForAnyArgs(x => (Invoice)x[0]);
-        
+
         DeleteInvoiceCommandHandler handler = new(invoiceRepository);
         DeleteInvoiceCommand command = new(1);
 

@@ -4,7 +4,7 @@ using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.GetBusiness;
+namespace UnitTests.Handler.Invoices;
 
 public class GetInvoiceHandlerTests
 {

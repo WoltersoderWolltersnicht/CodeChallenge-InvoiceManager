@@ -7,7 +7,7 @@ using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.UpdateBusiness;
+namespace UnitTests.Handler.People;
 
 public class UpdatePersonHandlerTests
 {

@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
-using InvoiceManager.Application.Handler.Businesses.DeleteBusiness;
 using InvoiceManager.Application.Handler.People.DeletePerson;
-using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.DeleteBusiness;
+namespace UnitTests.Handler.People;
 
 public class DeletePersonHandlerTests
 {

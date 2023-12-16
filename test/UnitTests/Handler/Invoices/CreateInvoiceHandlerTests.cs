@@ -2,13 +2,11 @@
 using InvoiceManager.Application.Handler.Invoices.CreateInvoice;
 using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Exceptions;
-using InvoiceManager.Domain.InvoiceLines;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
 using NSubstitute;
-using NSubstitute.Core.Arguments;
 
-namespace UnitTests.Handler.Businesses;
+namespace UnitTests.Handler.Invoices;
 
 public class CreateInvoiceHandlerTests
 {

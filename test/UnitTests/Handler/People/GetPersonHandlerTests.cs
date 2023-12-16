@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
-using InvoiceManager.Application.Handler.Businesses.GetBusiness;
 using InvoiceManager.Application.Handler.People.GetPerson;
-using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.Invoices;
 using InvoiceManager.Domain.People;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses.GetBusiness;
+namespace UnitTests.Handler.People;
 
 public class GetPersonHandlerTests
 {

@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
-using InvoiceManager.Application.Handler.Businesses.CreateBusiness;
 using InvoiceManager.Application.Handler.People.CreatePerson;
-using InvoiceManager.Domain.Businesses;
 using InvoiceManager.Domain.Exceptions;
 using InvoiceManager.Domain.People;
 using NSubstitute;
 
-namespace UnitTests.Handler.Businesses;
+namespace UnitTests.Handler.People;
 
 public class CreatePersonLineHandlerTests
 {
