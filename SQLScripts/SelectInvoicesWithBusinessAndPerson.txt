@@ -1,0 +1,4 @@
+SELECT NumFactura, Importe, Estado, Persona.Nombre, Persona.Apellido1, Persona.Apellido2, Persona.NIF, Empresa.RazonSocial, Empresa.CIF
+FROM Factura
+JOIN Persona USING(IdPersona)
+JOIN Empresa USING(IdEmpresa);
